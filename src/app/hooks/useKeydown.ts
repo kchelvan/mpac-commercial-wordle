@@ -7,7 +7,7 @@ export function useKeydown() {
 	};
 
 	useEffect(() => {
-		const keyDownHandler = (e: any) => {
+		const keyDownHandler = (e: KeyboardEvent) => {
 			if (e.code.includes('Key')) {
 				setUserInput(`${userInput}` + e.key);
 			}
@@ -17,6 +17,7 @@ export function useKeydown() {
 		return () => {
 			document.removeEventListener('keydown', keyDownHandler);
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return { userInput, clearUserInput };
