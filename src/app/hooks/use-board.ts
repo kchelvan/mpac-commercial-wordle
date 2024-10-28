@@ -1,20 +1,24 @@
 import { useEffect, useState } from 'react';
 import { BOARD_HEIGHT } from '../utils/const';
-export interface Guess {
-	guess: string;
-	valid?: boolean;
-	score?: number[];
-	isCurrent?: boolean;
-}
+import { ErrorType, GameStatusType, GuessType } from '../utils/types';
 
 export function useKeydown() {
-	const [guesses, setGuesses] = useState<Guess[]>([]);
+	const [gameStatus, setGameStatus] = useState<GameStatusType>(1);
+	const [guesses, setGuesses] = useState<GuessType[]>([]);
+	const [error, setError] = useState<ErrorType>({
+		row: null,
+		column: null,
+	});
 
 	const countCorrectPosition = (score: number[]) => {
 		return score.filter((x) => x == 2).length;
 	};
 
 	const validate = async (guess: string) => {
+		setError({
+			row: null,
+			column: null,
+		});
 		const response = await fetch(
 			'https://wordle-apis.vercel.app/api/validate',
 			{
@@ -31,9 +35,9 @@ export function useKeydown() {
 
 		const result = await response.json();
 
-		if (result.is_valid_word) {
-			setGuesses((_guesses) => {
-				const prevGuesses = _guesses.slice(0, -1);
+		setGuesses((_guesses) => {
+			const prevGuesses = _guesses.slice(0, -1);
+			if (result.is_valid_word) {
 				if (countCorrectPosition(result.score) == 5) {
 					return [
 						...prevGuesses,
@@ -50,18 +54,15 @@ export function useKeydown() {
 						},
 					];
 				}
-			});
-		}
+			} else {
+				setError({
+					row: prevGuesses?.length || 0,
+					column: null,
+				});
+				return _guesses;
+			}
+		});
 	};
-
-	/* 
-	
-	0 - not in word
-  1 - wrong position
-	2 - right position
-
-	Word is Blaze
-	*/
 
 	const keyDownHandler = (e: KeyboardEvent) => {
 		setGuesses((_guesses) => {
@@ -99,6 +100,21 @@ export function useKeydown() {
 	};
 
 	useEffect(() => {
+		const lastGuess = [...guesses].pop();
+		const wordleSolved =
+			lastGuess?.score?.filter((value) => value == 2).length == 5;
+		const gameComplete = wordleSolved || guesses.length == BOARD_HEIGHT;
+
+		if (!gameComplete) {
+			setGameStatus(1);
+		} else if (wordleSolved) {
+			setGameStatus(2);
+		} else if (!lastGuess?.isCurrent) {
+			setGameStatus(0);
+		}
+	}, [guesses]);
+
+	useEffect(() => {
 		document.addEventListener('keydown', keyDownHandler);
 
 		return () => {
@@ -107,5 +123,5 @@ export function useKeydown() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	return { guesses };
+	return { guesses, gameStatus, error, setError };
 }

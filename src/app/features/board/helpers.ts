@@ -1,12 +1,8 @@
+import { GuessType } from '@/app/utils/types';
 import styles from './board.module.css';
-import { Guess } from '@/app/hooks/useKeydown';
+import { CellValueResponse } from './types';
 
-interface cellValueResponse {
-	value: string;
-	data: Guess;
-}
-
-export const getCellValue = (index: number, guesses: Guess[]) => {
+export const getCellValue = (index: number, guesses: GuessType[]) => {
 	const row = Math.floor(index / 5);
 	const column = index % 5;
 	const value = guesses[row]?.guess?.[column];
@@ -15,7 +11,7 @@ export const getCellValue = (index: number, guesses: Guess[]) => {
 	return { value, data };
 };
 
-export const getCellStyle = (cellData: cellValueResponse, column: number) => {
+export const getCellStyle = (cellData: CellValueResponse, column: number) => {
 	const score = cellData?.data?.score;
 	const value = cellData?.value;
 
