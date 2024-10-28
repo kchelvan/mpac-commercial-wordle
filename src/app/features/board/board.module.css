@@ -11,13 +11,25 @@
 }
 
 .board_inactive_cell {
-	@apply border-gray-200;
+	@apply border-[var(--light-gray)];
 }
 
 .board_active_cell {
-	@apply border-gray-400;
+	@apply border-[var(--dark-gray)];
 }
 
 .board_letter {
-	@apply flex items-center justify-center font-bold text-[2rem] h-full;
+	@apply flex items-center justify-center font-bold text-[2rem] h-full uppercase;
+}
+
+.cell_correct_position {
+	@apply border-[var(--green)] bg-[var(--green)] text-[var(--white)];
+}
+
+.cell_correct_letter {
+	@apply border-[var(--yellow)] bg-[var(--yellow)] text-[var(--white)];
+}
+
+.cell_incorrect_letter {
+	@apply border-[var(--dark-gray)] bg-[var(--dark-gray)] text-[var(--white)];
 }
