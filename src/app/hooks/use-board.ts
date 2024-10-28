@@ -64,6 +64,7 @@ export const useBoard = () => {
 		});
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const keyDownHandler = (e: any) => {
 		setGuesses((_guesses: GuessType[]) => {
 			const prevGuesses = _guesses.slice(0, -1);
