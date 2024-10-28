@@ -3,10 +3,10 @@
 import React from 'react';
 import styles from './notification.module.css';
 import { TOAST_MESSAGES } from './const';
-import { useKeydown } from '@/app/hooks/use-board';
+import { useBoard } from '@/app/hooks/use-board';
 
 const Notification = () => {
-	const { gameStatus } = useKeydown();
+	const { gameStatus } = useBoard();
 
 	return (
 		<header className={styles.container}>

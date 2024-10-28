@@ -2,16 +2,16 @@
 
 import React from 'react';
 import styles from './board.module.css';
-import { useKeydown } from '@/app/hooks/use-board';
+import { useBoard } from '@/app/hooks/use-board';
 import { BOARD_HEIGHT, BOARD_WIDTH } from '@/app/utils/const';
 import { getCellStyle, getCellValue } from './helpers';
 
 export const Board = () => {
-	const { guesses, error, gameStatus } = useKeydown();
+	const { guesses, error, gameStatus } = useBoard();
 	const boardCells = Array(BOARD_HEIGHT * BOARD_WIDTH).fill(0);
 
 	return (
-		<form className={styles.container}>
+		<div className={styles.container}>
 			<div className={styles.board_container}>
 				{boardCells.map((_, idx) => {
 					const cellData = getCellValue(idx, guesses);
@@ -35,7 +35,7 @@ export const Board = () => {
 					);
 				})}
 			</div>
-		</form>
+		</div>
 	);
 };
 

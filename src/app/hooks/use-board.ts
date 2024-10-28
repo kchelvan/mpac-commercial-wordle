@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { BOARD_HEIGHT } from '../utils/const';
 import { ErrorType, GameStatusType, GuessType } from '../utils/types';
 
-export function useKeydown() {
+export const useBoard = () => {
 	const [gameStatus, setGameStatus] = useState<GameStatusType>(1);
 	const [guesses, setGuesses] = useState<GuessType[]>([]);
 	const [error, setError] = useState<ErrorType>({
@@ -65,11 +65,11 @@ export function useKeydown() {
 	};
 
 	const keyDownHandler = (e: KeyboardEvent) => {
-		setGuesses((_guesses) => {
+		setGuesses((_guesses: GuessType[]) => {
 			const prevGuesses = _guesses.slice(0, -1);
 			const lastGuess = _guesses[_guesses.length - 1] || {};
 			const gameComplete =
-				lastGuess.score?.filter((value) => value == 2).length == 5 ||
+				lastGuess.score?.filter((value: number) => value == 2).length == 5 ||
 				_guesses.length > BOARD_HEIGHT;
 
 			if (!gameComplete) {
@@ -124,4 +124,4 @@ export function useKeydown() {
 	}, []);
 
 	return { guesses, gameStatus, error, setError };
-}
+};
