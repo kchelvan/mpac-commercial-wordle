@@ -3,11 +3,12 @@
 import React from 'react';
 import styles from './notification.module.css';
 import { TOAST_MESSAGES } from './const';
-import { useBoard } from '@/app/hooks/use-board';
 
-const Notification = () => {
-	const { gameStatus } = useBoard();
+interface NotificationProps {
+	gameStatus: number;
+}
 
+const Notification = ({ gameStatus }: NotificationProps) => {
 	return (
 		<header className={styles.container}>
 			{gameStatus == 0 || gameStatus == 2 ? (
