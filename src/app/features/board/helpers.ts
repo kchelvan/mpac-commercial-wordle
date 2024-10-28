@@ -7,13 +7,10 @@ interface cellValueResponse {
 }
 
 export const getCellValue = (index: number, guesses: Guess[]) => {
-	let value: string;
-	let data: Guess;
 	const row = Math.floor(index / 5);
 	const column = index % 5;
-
-	value = guesses[row]?.guess?.[column];
-	data = guesses[row];
+	const value = guesses[row]?.guess?.[column];
+	const data = guesses[row];
 
 	return { value, data };
 };
