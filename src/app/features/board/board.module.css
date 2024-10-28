@@ -1,5 +1,5 @@
 .container {
-	@apply w-screen min-h-screen justify-center items-center flex flex-col;
+	@apply pb-4;
 }
 
 .board_container {
