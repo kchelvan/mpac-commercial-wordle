@@ -13,13 +13,20 @@ export const Board = () => {
 	const boardCells = Array(BOARD_HEIGHT * BOARD_WIDTH).fill(0);
 
 	useEffect(() => {
-		inputRef?.current?.focus();
-	}, []);
+		if (gameStatus != 1) {
+			inputRef?.current?.blur();
+		}
+	}, [gameStatus]);
 
 	return (
 		<>
 			<div className={styles.container}>
-				<input ref={inputRef} className={styles.hidden_input} />
+				<input
+					ref={inputRef}
+					className={styles.hidden_input}
+					autoFocus
+					onBlur={() => gameStatus == 1 && inputRef?.current?.focus()}
+				/>
 				<div className={styles.board_container}>
 					{boardCells.map((_, idx) => {
 						const cellData = getCellValue(idx, guesses);
@@ -29,7 +36,7 @@ export const Board = () => {
 							<div
 								key={`board-cell-${idx}`}
 								data-testid='board-cell'
-								onClick={() => inputRef?.current?.focus()}
+								onClick={() => gameStatus == 1 && inputRef?.current?.focus()}
 								className={`${styles.board_cell} ${getCellStyle(
 									cellData,
 									column
