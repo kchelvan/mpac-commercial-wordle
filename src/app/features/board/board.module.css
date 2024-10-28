@@ -33,3 +33,7 @@
 .cell_incorrect_letter {
 	@apply border-[var(--dark-gray)] bg-[var(--dark-gray)] text-[var(--white)];
 }
+
+.hidden_input {
+	@apply h-0;
+}

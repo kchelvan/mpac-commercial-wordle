@@ -64,7 +64,7 @@ export const useBoard = () => {
 		});
 	};
 
-	const keyDownHandler = (e: KeyboardEvent) => {
+	const keyDownHandler = (e: any) => {
 		setGuesses((_guesses: GuessType[]) => {
 			const prevGuesses = _guesses.slice(0, -1);
 			const lastGuess = _guesses[_guesses.length - 1] || {};
@@ -73,22 +73,22 @@ export const useBoard = () => {
 				_guesses.length > BOARD_HEIGHT;
 
 			if (!gameComplete) {
-				if (e.code.includes('Key')) {
+				if (e.inputType == 'insertText') {
 					if (!lastGuess.isCurrent) {
-						return [..._guesses, { guess: e.key, isCurrent: true }];
+						return [..._guesses, { guess: e.data, isCurrent: true }];
 					} else if (lastGuess.isCurrent && lastGuess.guess?.length < 5) {
 						return [
 							...prevGuesses,
-							{ guess: lastGuess.guess + e.key, isCurrent: true },
+							{ guess: lastGuess.guess + e.data, isCurrent: true },
 						];
 					} else {
 						return _guesses;
 					}
 				}
-				if (e.code == 'Enter' && !lastGuess.score) {
+				if (e.key == 'Enter' && !lastGuess.score) {
 					validate(lastGuess.guess);
 				}
-				if (e.code == 'Backspace') {
+				if (e.inputType == 'deleteContentBackward') {
 					return [
 						...prevGuesses,
 						{ guess: lastGuess.guess.slice(0, -1), isCurrent: true },
@@ -116,9 +116,11 @@ export const useBoard = () => {
 
 	useEffect(() => {
 		document.addEventListener('keydown', keyDownHandler);
+		document.addEventListener('input', keyDownHandler);
 
 		return () => {
 			document.removeEventListener('keydown', keyDownHandler);
+			document.removeEventListener('input', keyDownHandler);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
