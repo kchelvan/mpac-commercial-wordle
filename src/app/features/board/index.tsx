@@ -19,7 +19,8 @@ export const Board = () => {
 					const column = idx % 5;
 					return (
 						<div
-							key={idx}
+							key={`board-cell-${idx}`}
+							data-testid='board-cell'
 							className={`${styles.board_cell} ${getCellStyle(
 								cellData,
 								column
